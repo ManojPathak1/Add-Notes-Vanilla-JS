@@ -30,16 +30,19 @@ const debounce = (func, delay) => {
   }
 }
 
+/**
+ * Function generates the integers for the unique id.
+ */
 const idGenerator = () => {
   // Saving the count in the localStorage to keep track of the id.
-  var count = getLocalStorageItem("count") || 1;
+  let count = getLocalStorageItem("count") || 1;
   return () => {
     setLocalStorage("count", count + 1);
     return count++;
   }
 };
-let generateId = idGenerator();
-let notesContainer = getElementById("notesContainer");
+const generateId = idGenerator();
+const notesContainer = getElementById("notesContainer");
 
 /**
  * This function sets data to localStorage and triggers the DOM update.
@@ -54,7 +57,7 @@ const setAndTrigger = data => {
  * Triggers the DOM update.
  * @param {Array} data 
  */
-function triggerUpdate(data) {
+const triggerUpdate = (data) => {
   notesContainer.innerHTML = "";
   data.forEach(parentNote => {
     notesContainer.appendChild(createNoteSubNotesContainer(parentNote));
@@ -65,18 +68,20 @@ function triggerUpdate(data) {
  * This function returns DOM node for the cards to be rendered.
  * @param {Array} note 
  */
-function createNoteSubNotesContainer(note) {
-  var div1 = createDivElement();
-  var div2 = createDivElement();
-  var div3 = createDivElement();
+const createNoteSubNotesContainer = (note) => {
+  let div1 = createDivElement();
+  let div2 = createDivElement();
+  let div3 = createDivElement();
   if (isEditable && note.id == editNoteId) {
-    var editInput = createInputElement();
+    let editInput = createInputElement();
     editInput.setAttribute("id", note.id);
     editInput.value = note.text;
     editInput.addEventListener("keydown", (event) => { 
       if (event.keyCode === 13) {
         noteId = null;
-        editNoteText(data, event.target.value, event.target.id);
+        const value = event.target.value;
+        const id = event.target.id;
+        editNoteText(data, value, id);
         triggerUpdate(data);
       }
     });
@@ -85,12 +90,12 @@ function createNoteSubNotesContainer(note) {
       editInput.focus();
     });
   } else {
-    var span = createSpanElement();
+    let span = createSpanElement();
     span.addEventListener("click", (event) => {
       editNote(event);
     });
     span.setAttribute("id", note.id);
-    var text = document.createTextNode(note.text);
+    let text = document.createTextNode(note.text);
     span.appendChild(text);
     div2.appendChild(span);
   }
@@ -116,10 +121,10 @@ function createNoteSubNotesContainer(note) {
  * @param {DOM} div 
  * @param {Object} note 
  */
-function addButtons(div, note) {
-  var divButton = createDivElement();
-  var button1 = createButtonElement();
-  var button2 = createButtonElement();
+const addButtons = (div, note) => {
+  let divButton = createDivElement();
+  let button1 = createButtonElement();
+  let button2 = createButtonElement();
   button1.setAttribute("id", note.id);
   button2.setAttribute("id", note.id);
   button1.innerHTML = "DELETE";
@@ -128,13 +133,14 @@ function addButtons(div, note) {
   button2.classList.add("addNoteBtn");
   button1.addEventListener("click", (event) => {
     noteId = null;
-    var noteIdToDelete = event.target.id;
+    const noteIdToDelete = event.target.id;
     deleteNote(data, noteIdToDelete);
     setAndTrigger(data);
   });
   button2.addEventListener("click", (event) => {
-    if (noteId === event.target.id) noteId = null;
-    else noteId = event.target.id;
+    const id = event.target.id;
+    if (noteId === id) noteId = null;
+    else noteId = id;
     getElementById("note").focus();
     triggerUpdate(data);
   });
@@ -148,13 +154,13 @@ function addButtons(div, note) {
  * Create a new note
  * @param {Event} event 
  */
-function createNote(event) {
+const createNote = (event) => {
   event.preventDefault();
-  var input = getElementById("note");
-  var textValue = input.value;
+  let input = getElementById("note");
+  let textValue = input.value;
   if (textValue.trim().length < 4 || textValue.trim().length > 20) return;
-  var newId = generateId();
-  var noteObj = { id: newId, text: textValue };
+  let newId = generateId();
+  let noteObj = { id: newId, text: textValue };
   if (noteId) {
     addIntoChild(data, noteId, noteObj);
   } else {
@@ -170,8 +176,8 @@ function createNote(event) {
  * @param {String} noteId 
  * @param {Object} noteObj 
  */
-function addIntoChild(data, noteId, noteObj) {
-  for (var i = 0; i < data.length; i++) {
+const addIntoChild = (data, noteId, noteObj) => {
+  for (let i = 0; i < data.length; i++) {
     if (data[i].id == noteId) {
       if (!data[i].childNotes) data[i].childNotes = [];
       data[i].childNotes.push(noteObj);
@@ -189,8 +195,8 @@ function addIntoChild(data, noteId, noteObj) {
  * @param {Array} data 
  * @param {String} noteId 
  */
-function deleteNote(data, noteId) {
-  var idx = data.findIndex(el => el.id == noteId);
+const deleteNote = (data, noteId) => {
+  let idx = data.findIndex(el => el.id == noteId);
   if (idx > -1) data.splice(idx, 1);
   else {
     data.forEach(el => {
@@ -203,7 +209,7 @@ function deleteNote(data, noteId) {
  * Editing the name of the note.
  * @param {Event} event 
  */
-function editNote(event) {
+const editNote = (event) => {
   isEditable = true;
   editNoteId = event.target.id;
   setAndTrigger(data);
@@ -215,8 +221,8 @@ function editNote(event) {
  * @param {String} text 
  * @param {String} id 
  */
-function editNoteText(data, text, id) {
-  for (var i = 0; i < data.length; i++) {
+const editNoteText = (data, text, id) => {
+  for (let i = 0; i < data.length; i++) {
     if (data[i].id == id) {
       data[i].text = text;
       isEditable = false;
@@ -234,7 +240,7 @@ function editNoteText(data, text, id) {
  * Function triggers for search.
  * @param {Event} event 
  */
-function _searchNotes(event) {
+const _searchNotes = (event) => {
   noteId = null;
   let arr = [];
   let data = getLocalStorageItem("Data");
@@ -257,7 +263,7 @@ const searchNotes = debounce(_searchNotes, 800);
  * @param {Array} data 
  * @param {String} value 
  */
-function searchValue(arr, data, value) {
+const searchValue = (arr, data, value) => {
   data.forEach(el => {
     if (el.text == value) {
       arr.push({ id: el.id, text: el.text });
