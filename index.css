@@ -1,0 +1,72 @@
+body {
+  font-family: 'Baloo Bhaina 2', cursive;
+  background-color: aliceblue;
+}
+
+.container {
+  padding: 10px;
+}
+
+.notes {
+  padding: 10px;
+  width: fit-content;
+  margin: 10px;
+  background-color: white;
+}
+
+span {
+  font-size: 20px;
+}
+
+.subNotes {
+  margin-left: 20px;
+}
+
+.buttonDiv {
+  margin-top: 5px;
+    width: 180px;
+    display: flex;
+    justify-content: space-between;
+    margin-top:5px;
+}
+
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 3px;
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.card-container {
+  padding: 2px 16px;
+}
+
+button {
+  font-size: 14px;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.addNoteBtn {
+  background: green;
+}
+
+.deleteNote {
+  background: red;
+}
+
+input {
+  font-size: 20px;
+  border-radius: 5px;
+  border: 1px #eee solid;
+  padding: 5px;
+}
+
+.toogleCardSelection {
+  background-color: honeydew;
+}
