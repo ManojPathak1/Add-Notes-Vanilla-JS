@@ -82,7 +82,7 @@ const createNoteSubNotesContainer = (note) => {
         const value = event.target.value;
         const id = event.target.id;
         editNoteText(data, value, id);
-        triggerUpdate(data);
+        setAndTrigger(data);
       }
     });
     div2.appendChild(editInput);
